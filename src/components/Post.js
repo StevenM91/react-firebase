@@ -1,6 +1,6 @@
-import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { db } from "../utils/firebase.config";
+import { useDispatch } from "react-redux";
+import { editPost } from "../actions/post.action";
 import CommentPost from "./CommentPost";
 import Delete from "./Delete";
 
@@ -8,6 +8,7 @@ const Post = ({ post, user }) => {
   // on crée le state qui va nous permettre d'éditer le posts
   const [edit, setEdit] = useState(false);
   const [editMess, setEditMess] = useState(null);
+  const dispatch = useDispatch();
 
   // on va crée une fonction qui va nous permettre de traiter la date
   const dateFormater = (date) => {
@@ -27,7 +28,13 @@ const Post = ({ post, user }) => {
     setEdit(false);
 
     if (editMess) {
-      updateDoc(doc(db, "posts", post.id), { message: editMess });
+      // dispatchEdit
+      dispatch(
+        editPost({
+          id: post.id,
+          message: editMess,
+        })
+      );
     }
   };
 

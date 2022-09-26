@@ -1,12 +1,14 @@
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
 import React, { useRef, useState } from "react";
-import { auth, db } from "../utils/firebase.config";
+import { useDispatch } from "react-redux";
+import { addComment } from "../actions/post.action";
+import { auth } from "../utils/firebase.config";
 import CommentCard from "./CommentCard";
 
 const CommentPost = ({ post }) => {
   const [user, setUser] = useState(null);
   const answerContent = useRef();
+  const dispatch = useDispatch();
 
   // permet de verifier avec firebase si l'utilisateur est connecté
   onAuthStateChanged(auth, (currentUser) => {
@@ -35,8 +37,8 @@ const CommentPost = ({ post }) => {
       ];
     }
 
-    // cela permettra d'ajouter les commentaire à la base de donnée selon le posts qu'on comments
-    updateDoc(doc(db, "posts", post.id), { comments: data });
+    // dispatch comment
+    dispatch(addComment(post.id, data));
     answerContent.current.value = "";
   };
 
