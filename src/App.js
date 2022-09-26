@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConnectModal from "./components/ConnectModal";
 import "./styles/index.scss";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./utils/firebase.config";
+import { auth, db } from "./utils/firebase.config";
 import CreatePost from "./components/CreatePost";
+import { collection, getDocs } from "firebase/firestore";
+import Post from "./components/Post";
 
 function App() {
   //on crée une variable pour stocker nos donnée utilisateur
   const [user, setUser] = useState(null);
+
+  // On va aller chercher les donnée dans la base de donnée pour les récuperer puis les afficher grâce a map
+  const [posts, setPosts] = useState([]);
 
   // on crée une methode pour vérifier si l'utilisateur est connecter
   // cela nous permet de vérifier n'importe ou dans notre site si notre utilisateur est connecter
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
+
+  // on crée une useEffect pour dire quand le composent est monter va me chercher les élément dans la bdd pour me les afficher
+  useEffect(() => {
+    getDocs(collection(db, "posts")).then((res) =>
+      setPosts(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    );
+  }, []);
 
   // paramettre de la déconnexion
   const handleLogout = async () => {
@@ -41,7 +53,12 @@ function App() {
           <ConnectModal />
         )}
       </div>
-      <div className="posts-container"></div>
+      <div className="posts-container">
+        {posts.length > 0 &&
+          posts
+            .sort((a, b) => b.date - a.date)
+            .map((post) => <Post post={post} key={post.id} user={user} />)}
+      </div>
     </div>
   );
 }
