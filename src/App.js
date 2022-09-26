@@ -34,7 +34,12 @@ function App() {
           </div>
         )}
         {/* on crée une condition d'afficher qui va demander si user existe et biensur connecter affiche moi cela sinon affiche connexion ou inscription */}
-        {user ? <CreatePost /> : <ConnectModal />}
+        {/* dans créate posts on passe en propos les élément car cela à était coder plus haut cela permettra de récuperer les information utilisateur */}
+        {user ? (
+          <CreatePost uid={user.uid} displayName={user.displayName} />
+        ) : (
+          <ConnectModal />
+        )}
       </div>
       <div className="posts-container"></div>
     </div>
