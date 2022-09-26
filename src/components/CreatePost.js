@@ -1,9 +1,12 @@
 import React, { useRef } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../utils/firebase.config";
+import { useDispatch } from "react-redux";
+import { addPost, getPosts } from "../actions/post.action";
 
 const CreatePost = ({ uid, displayName }) => {
   const message = useRef();
+  const dispatch = useDispatch();
 
   const handlePost = async (e) => {
     e.preventDefault();
@@ -19,9 +22,11 @@ const CreatePost = ({ uid, displayName }) => {
     // permet de ce controller si on récupere bien le message
     // console.log(data);
 
-    // on crée le create du crud en react , le addDoc ces cela qui permet d'envoyer les élément en BDD
-    await addDoc(collection(db, "posts"), data);
+    // Dispatch la fonction
+    await dispatch(addPost(data));
     message.current.value = "";
+    // On récupere la clé unique de chaque post directement
+    dispatch(getPosts());
   };
 
   return (
