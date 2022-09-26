@@ -1,6 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { db } from "../utils/firebase.config";
+import Delete from "./Delete";
 
 const Post = ({ post, user }) => {
   // on crée le state qui va nous permettre d'éditer le posts
@@ -45,7 +46,7 @@ const Post = ({ post, user }) => {
             <span onClick={() => setEdit(!edit)}>
               <i className="fa-solid fa-pen-to-square"></i>
             </span>
-            <span>DELETE</span>
+            <Delete postId={post.id} />
           </div>
         )}
       </div>
