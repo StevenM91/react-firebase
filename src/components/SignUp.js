@@ -23,6 +23,9 @@ const SignUp = () => {
           await userAuth.user.updateProfile({
             displayName,
           });
+          //console.log(userAuth);
+          // On fait recharger la pages pour que l'application est le temp de prendre en compte l'utilisateur quand il s'inscrie ou se connecte
+          window.location.reload();
         });
     } catch (error) {
       console.log(error.message);
