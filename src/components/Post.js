@@ -1,6 +1,7 @@
 import { doc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { db } from "../utils/firebase.config";
+import CommentPost from "./CommentPost";
 import Delete from "./Delete";
 
 const Post = ({ post, user }) => {
@@ -65,6 +66,7 @@ const Post = ({ post, user }) => {
       ) : (
         <p>{editMess ? editMess : post.message}</p>
       )}
+      <CommentPost post={post} />
     </div>
   );
 };
