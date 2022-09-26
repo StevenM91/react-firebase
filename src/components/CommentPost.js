@@ -21,7 +21,7 @@ const CommentPost = ({ post }) => {
     if (post.comments === null) {
       data = [
         {
-          commmentAuthor: user.displayName,
+          commentAuthor: user.displayName,
           text: answerContent.current.value,
         },
       ];
@@ -29,7 +29,7 @@ const CommentPost = ({ post }) => {
       data = [
         ...post.comments,
         {
-          commmentAuthor: user.displayName,
+          commentAuthor: user.displayName,
           text: answerContent.current.value,
         },
       ];

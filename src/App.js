@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import ConnectModal from "./components/ConnectModal";
 import "./styles/index.scss";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth, db } from "./utils/firebase.config";
+import { auth } from "./utils/firebase.config";
 import CreatePost from "./components/CreatePost";
-import { collection, getDocs } from "firebase/firestore";
 import Post from "./components/Post";
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "./actions/post.action";
 
 function App() {
   //on crée une variable pour stocker nos donnée utilisateur
   const [user, setUser] = useState(null);
 
   // On va aller chercher les donnée dans la base de donnée pour les récuperer puis les afficher grâce a map
-  const [posts, setPosts] = useState([]);
+  const posts = useSelector((state) => state.postReducer);
+
+  const dispatch = useDispatch();
 
   // on crée une methode pour vérifier si l'utilisateur est connecter
   // cela nous permet de vérifier n'importe ou dans notre site si notre utilisateur est connecter
@@ -20,11 +23,8 @@ function App() {
     setUser(currentUser);
   });
 
-  // on crée une useEffect pour dire quand le composent est monter va me chercher les élément dans la bdd pour me les afficher
   useEffect(() => {
-    getDocs(collection(db, "posts")).then((res) =>
-      setPosts(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-    );
+    dispatch(getPosts());
   }, []);
 
   // paramettre de la déconnexion
